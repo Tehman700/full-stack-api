@@ -4,7 +4,6 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from quickstart.models.subscription_models import SubscribeTable, UnsubscribeTable
 from quickstart.serializers.subscription_serializers import SubscribeSerializer, UnsubscribeSerializer
-from quickstart.signals import log_unsubscribe_activity, log_subscription_activity
 from quickstart.utils.response_handler import ResponseHandler
 
 
