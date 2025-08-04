@@ -52,8 +52,6 @@ class SubscribeView(APIView):
             is_active=True
         )
 
-        log_subscription_activity(current_user, to_be_subscribed.username, subscription.id)
-
         serializer = SubscribeSerializer(subscription)
         return ResponseHandler.success(
             message=f'Successfully subscribed to {to_be_subscribed.username}',
@@ -105,8 +103,6 @@ class UnsubscribeView(APIView):
                 author=to_be_unsubscribed,
                 original_subscription=active_subscription,
             )
-
-            log_unsubscribe_activity(current_user, to_be_unsubscribed.username, unsubscribe_record.id)
 
         serializer = UnsubscribeSerializer(unsubscribe_record)
         return ResponseHandler.success(
