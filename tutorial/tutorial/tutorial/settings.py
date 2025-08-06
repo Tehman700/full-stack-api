@@ -6,6 +6,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+import os
+
+EMAIL_BACKEND = os.getenv('EMAIL_BACKEND', 'django.core.mail.backends.smtp.EmailBackend')
+EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp.gmail.com')
+EMAIL_PORT = int(os.getenv('EMAIL_PORT', 587))
+EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'True') == 'True'
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
@@ -19,6 +26,22 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
+CELERY_BROKER_URL = 'amqp://guest:guest@localhost:5672//'
+CELERY_RESULT_BACKEND = 'rpc://'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'UTC'
+CELERY_TASK_ALWAYS_EAGER = False  # Set to True for testing without Celery worker
+# Windows-specific settings
+CELERY_WORKER_POOL = 'solo'  # or 'eventlet' or 'gevent'
+CELERY_WORKER_CONCURRENCY = 1
+CELERY_WORKER_PREFETCH_MULTIPLIER = 1
+
+
+
+
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -31,7 +54,8 @@ INSTALLED_APPS = [
     'profile_api',
     'rest_framework_simplejwt',
     'rest_framework',
-    'tests'
+    'tests',
+    'django_celery_results',
 ]
 
 MIDDLEWARE = [

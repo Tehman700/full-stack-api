@@ -1,13 +1,10 @@
-import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from quickstart.models.blog_models import BlogPostCommentModel, ReplyCommentModel, BlogModel
 from quickstart.models.subscription_models import SubscribeTable
 from quickstart.serializers.blog_post_serializer import BlogPostSerializer, CommentSerializer, ReplySerializer
 from quickstart.utils.response_handler import ResponseHandler
-from django.conf import settings
+from quickstart.tasks.email_tasks import send_blog_notification_email
 
 
 class BlogPostAPIView(APIView):
@@ -36,6 +33,7 @@ class BlogPostAPIView(APIView):
         serializer = BlogPostSerializer(data=post_data)
         if serializer.is_valid():
             serializer.save(user=current_user)
+            blog_title = serializer.data.get('title', 'Untitled')
 
             response_data = serializer.data.copy()
             response_data['author'] = current_user.username
@@ -44,38 +42,37 @@ class BlogPostAPIView(APIView):
             # Fetch subscribers' emails
             subscribers = SubscribeTable.objects.filter(author=current_user, is_active=True).select_related('subscriber')
             subscribers_emails = [sub.subscriber.email for sub in subscribers if sub.subscriber.email]
-            print(subscribers_emails)
+            send_blog_notification_email.delay(current_user.username, blog_title, subscribers_emails)
             # Email setup
-            sender_email = settings.EMAIL_HOST_USER
-            password = settings.EMAIL_HOST_PASSWORD
-            subject = f"New Blog Post by {current_user.username}"
-            blog_title = serializer.data.get('title', 'Untitled')
-
-            # Send email to all subscribers from the list
-            with smtplib.SMTP("smtp.gmail.com", 587) as server:
-                server.starttls()
-                server.login(sender_email, password)
-                blog_id = serializer.data.get('id')  # Get numeric blog ID
-
-                for email in subscribers_emails:
-                    body = (
-                        f"Hello Subscriber,\n\n"
-                        f"You are subscribed to {current_user.username}'s blog.\n\n"
-                        f"A new blog has been published!\n"
-                        f"Title: {blog_title}\n\n"
-                        f"Visit your dashboard to read it.\n\n"
-                        f"If you wish to unsubscribe, you can send an Unsubscribe Request.\n\n"
-                        f"Happy reading!\n"
-                        f"— Tehman Hassan, CEO Blog API"
-                    )
-
-                    message = MIMEMultipart()
-                    message["From"] = sender_email
-                    message["To"] = email
-                    message["Subject"] = subject
-                    message.attach(MIMEText(body, "plain"))
-
-                    server.send_message(message)
+            # sender_email = settings.EMAIL_HOST_USER
+            # password = settings.EMAIL_HOST_PASSWORD
+            # subject = f"New Blog Post by {current_user.username}"
+            #
+            # # Send email to all subscribers from the list
+            # with smtplib.SMTP("smtp.gmail.com", 587) as server:
+            #     server.starttls()
+            #     server.login(sender_email, password)
+            #     blog_id = serializer.data.get('id')  # Get numeric blog ID
+            #
+            #     for email in subscribers_emails:
+            #         body = (
+            #             f"Hello Subscriber,\n\n"
+            #             f"You are subscribed to {current_user.username}'s blog.\n\n"
+            #             f"A new blog has been published!\n"
+            #             f"Title: {blog_title}\n\n"
+            #             f"Visit your dashboard to read it.\n\n"
+            #             f"If you wish to unsubscribe, you can send an Unsubscribe Request.\n\n"
+            #             f"Happy reading!\n"
+            #             f"— Tehman Hassan, CEO Blog API"
+            #         )
+            #
+            #         message = MIMEMultipart()
+            #         message["From"] = sender_email
+            #         message["To"] = email
+            #         message["Subject"] = subject
+            #         message.attach(MIMEText(body, "plain"))
+            #
+            #         server.send_message(message)
 
             return ResponseHandler.success(
                 message="Blog created and notifications sent.",
