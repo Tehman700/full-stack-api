@@ -13,8 +13,6 @@ EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp.gmail.com')
 EMAIL_PORT = int(os.getenv('EMAIL_PORT', 587))
 EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'True') == 'True'
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-==1@d!t%!7hp+55#zd27r17+#9ez80m)_4%$#!jbih)mpj+6^g'
@@ -23,7 +21,6 @@ SECRET_KEY = 'django-insecure-==1@d!t%!7hp+55#zd27r17+#9ez80m)_4%$#!jbih)mpj+6^g
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 CELERY_BROKER_URL = 'amqp://guest:guest@localhost:5672//'
@@ -37,10 +34,6 @@ CELERY_TASK_ALWAYS_EAGER = False  # Set to True for testing without Celery worke
 CELERY_WORKER_POOL = 'solo'  # or 'eventlet' or 'gevent'
 CELERY_WORKER_CONCURRENCY = 1
 CELERY_WORKER_PREFETCH_MULTIPLIER = 1
-
-
-
-
 
 
 INSTALLED_APPS = [

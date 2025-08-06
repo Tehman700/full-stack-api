@@ -5,7 +5,6 @@ from django.core.mail import send_mail
 
 logger = logging.getLogger(__name__)
 
-
 @shared_task(bind=True, max_retries=3, default_retry_delay=60)
 def send_blog_notification_email(self, current_user_username, blog_title, subscribers_emails):
     try:
