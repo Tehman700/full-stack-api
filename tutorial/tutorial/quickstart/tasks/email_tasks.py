@@ -1,8 +1,4 @@
 import logging
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
-
 from celery import shared_task
 from django.conf import settings
 from django.core.mail import send_mail
@@ -12,9 +8,6 @@ logger = logging.getLogger(__name__)
 
 @shared_task(bind=True, max_retries=3, default_retry_delay=60)
 def send_blog_notification_email(self, current_user_username, blog_title, subscribers_emails):
-    """
-    Send blog notification emails using Django's built-in email system
-    """
     try:
         if not subscribers_emails:
             logger.warning("No subscriber emails provided")
