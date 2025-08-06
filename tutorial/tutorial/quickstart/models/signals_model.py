@@ -1,5 +1,10 @@
+from datetime import datetime
+
 from django.db import models
 from django.contrib.auth.models import User
+
+now = datetime.now()
+timing = now.strftime("%B %d, %Y at %I:%M %p")
 
 class ActivityLog(models.Model):
     action = models.CharField(max_length=100)
@@ -37,3 +42,33 @@ class BlogActivityMap(models.Model):
 
     def __str__(self):
         return f"Activity Map for Blog #{self.blog.id}"
+
+
+
+
+class ErrorLog(models.Model):
+    user = models.ForeignKey(User, null = True, blank = True, on_delete=models.SET_NULL)
+    path = models.CharField(max_length=1000)
+    method = models.CharField(max_length=10)
+    message = models.TextField()
+    status_code = models.IntegerField(null=True, blank=True)
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Error Log, message: {self.message}, status_code: {self.status_code} at path: {self.path}, method: {self.method}, created:{timing}"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

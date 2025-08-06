@@ -3,6 +3,7 @@ from rest_framework.views import APIView
 from quickstart.models.blog_models import BlogPostCommentModel, ReplyCommentModel, BlogModel
 from quickstart.models.subscription_models import SubscribeTable
 from quickstart.serializers.blog_post_serializer import BlogPostSerializer, CommentSerializer, ReplySerializer
+from quickstart.utils.logger import log_error
 from quickstart.utils.response_handler import ResponseHandler
 from quickstart.tasks.email_tasks import send_blog_notification_email
 
@@ -14,6 +15,8 @@ class BlogPostAPIView(APIView):
         current_user = request.user
 
         if current_user.profile.role.lower() != 'writer':
+            log_error(request, 'Other than writer trying to post blog', 200)
+
             return ResponseHandler.error(
                 message='Only Writers are allowed to post',
                 code=0,
@@ -24,6 +27,8 @@ class BlogPostAPIView(APIView):
         allowed_fields = {'title', 'content'}
         extra_fields = set(post_data.keys()) - allowed_fields
         if extra_fields:
+            log_error(request, 'More fields written', 200)
+
             return ResponseHandler.error(
                 message='Only title and content are allowed.',
                 errors="NONE",
@@ -52,6 +57,8 @@ class BlogPostAPIView(APIView):
                 data=response_data
             )
         else:
+            log_error(request, 'Not Entered Correct fields', 200)
+
             return ResponseHandler.rest_error(
                 message='Please Enter Correct fields',
                 errors=serializer.errors,
@@ -86,6 +93,7 @@ class BlogPostAPIView(APIView):
                 data = data_with_authors
             )
         else:
+            log_error(request, 'Other Roles are trying to fetch blogs', 200)
             return ResponseHandler.error(
                 message='No other Roles are Allowed',
                 code=-1
@@ -108,7 +116,6 @@ class BlogPostAPIView(APIView):
         ).count()
 
     def get_comments_with_replies(self, blog, current_user):
-        """Helper method to get comments with their replies using database fields"""
         comments = BlogPostCommentModel.objects.filter(blog=blog).order_by('created')
         comments_data = []
 
@@ -134,6 +141,8 @@ class BlogPostAPIView(APIView):
 
 
     def http_method_not_allowed(self, request, *args, **kwargs):
+        log_error(request, 'Other than POST and GET are used', 200)
+
         return ResponseHandler.error(
             message='No other Methods Allowed',
             code=-1,

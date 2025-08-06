@@ -7,10 +7,14 @@ from quickstart.models.signals_model import ActivityLog
 from quickstart.serializers.user_data_serializer import User_Data_Serializer, LoginSerializer
 from datetime import datetime
 
+from quickstart.utils.logger import log_error
+
+
 class LoginViewSet(viewsets.ViewSet):
 
     def dispatch(self, request, *args, **kwargs):
         if request.method != 'POST':
+            log_error(request, 'Other than POST Request fired', 200)
             return ResponseHandler.error(
                 message=f"Method {request.method} not allowed. Only POST is supported.",
                 code=1
@@ -36,6 +40,7 @@ class LoginViewSet(viewsets.ViewSet):
                 try:
                     user_profile = User_Data.objects.get(user=user)
                 except User_Data.DoesNotExist:
+                    log_error(request, 'User profile does not exist', 200)
                     return ResponseHandler.rest_error(
                         message="User profile not found",
                         errors="User profile does not exist"
@@ -64,12 +69,15 @@ class LoginViewSet(viewsets.ViewSet):
                     }
                 }, message="Login successful")
 
+            log_error(request, "Login Failed", 200)
             return ResponseHandler.rest_error(
                 message="Login failed",
                 errors=serializer.errors
             )
 
         except Exception as e:
+            log_error(request, 'Internal Server Error Occurred', 200)
+
             return ResponseHandler.rest_error(
                 message="Internal error occurred",
                 errors=str(e),
@@ -86,6 +94,8 @@ class RegisterAPIView(APIView):
             missing_fields = [field for field in required_fields if not request.data.get(field)]
 
             if missing_fields:
+                log_error(request, 'Missing Fields for Registration', 200)
+
                 return ResponseHandler.error(
                     message="Missing required fields",
                     errors={field: "This field is required." for field in missing_fields}
@@ -128,12 +138,15 @@ class RegisterAPIView(APIView):
             )
 
         except Exception as e:
+            log_error(request, 'Something went wrong during registration', 200)
+
             return ResponseHandler.error(
                 message="Something went wrong during registration",
                 errors=str(e)
             )
 
     def http_method_not_allowed(self, request, *args, **kwargs):
+        log_error(request, 'Method Not Allowed', 200)
         return ResponseHandler.error(
             message="Only POST is allowed on register",
             code=-1,
