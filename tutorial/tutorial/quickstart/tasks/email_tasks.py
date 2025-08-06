@@ -145,7 +145,6 @@ def send_blog_notification_email_smtp(self, current_user_username, blog_title, s
                 "failed": failed_emails,
             }
         }
-
     except Exception as exc:
         logger.error(f"SMTP Email task failed: {str(exc)}")
         try:
