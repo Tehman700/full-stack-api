@@ -99,7 +99,6 @@ class UnsubscribeView(APIView):
                 message=f'You are not subscribed to {to_be_unsubscribed.username}. First Subscribe',
                 code=1
             )
-
         with transaction.atomic():
             # Mark old subscription inactive
             active_subscription.is_active = False
