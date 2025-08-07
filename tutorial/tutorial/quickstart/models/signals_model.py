@@ -30,11 +30,7 @@ class ActivityLog(models.Model):
         return f"[{status_str}] {username} {self.action} {self.model_name}(#{self.instance_id})"
 
 
-
-
-
 # This model is solely for saving the instances of blogs for specific status updates when blog deleted
-
 
 class BlogActivityMap(models.Model):
     blog = models.OneToOneField('BlogModel', on_delete=models.CASCADE, related_name='activity_map')
@@ -44,8 +40,7 @@ class BlogActivityMap(models.Model):
         return f"Activity Map for Blog #{self.blog.id}"
 
 
-
-
+# This model is for the Error Logs for Blog API
 class ErrorLog(models.Model):
     user = models.ForeignKey(User, null = True, blank = True, on_delete=models.SET_NULL)
     path = models.CharField(max_length=1000)
