@@ -29,7 +29,6 @@ class SubscribeView(APIView):
                 message="You can only subscribe to a writer",
                 code=1
             )
-
         if current_user.username == pk:
             log_error(request, 'Cannot subscribe to yourself', 200)
             return ResponseHandler.error(
