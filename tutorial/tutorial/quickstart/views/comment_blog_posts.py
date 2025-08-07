@@ -3,6 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from quickstart.models.blog_models import BlogModel, BlogPostCommentModel
 from quickstart.serializers.blog_post_serializer import CommentSerializer
+from quickstart.utils.logger import log_error
 from quickstart.utils.response_handler import ResponseHandler
 
 class CommentBlogPost(APIView):
@@ -20,6 +21,7 @@ class CommentBlogPost(APIView):
         blog_id = data.get('blog')
         comment_text = data.get('comment')
         if not blog_id or not comment_text:
+            log_error(request, 'Fields are empty', 200)
             return ResponseHandler.error(
                 message='Both blog and comment fields are required.',
                 code=1
@@ -27,11 +29,13 @@ class CommentBlogPost(APIView):
         try:
             blog = BlogModel.objects.get(pk=blog_id)
         except BlogModel.DoesNotExist:
+            log_error(request, 'No such blog exist', 200)
             return ResponseHandler.error(
                 message='Blog does not exist.',
                 code=1
             )
         if blog.user == current_user:
+            log_error(request, 'Trying to comment on own blog', 200)
             return ResponseHandler.error(
                 message='You cannot comment on your own blog.',
                 code=1
@@ -60,6 +64,7 @@ class CommentBlogPost(APIView):
 
 
     def http_method_not_allowed(self, request, *args, **kwargs):
+        log_error(request, 'Other than POST Request being used', 200)
         return ResponseHandler.error(
             message='Only POST is allowed for commenting',
             code=-1

@@ -4,6 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from quickstart.models.subscription_models import SubscribeTable, UnsubscribeTable
 from quickstart.serializers.subscription_serializers import SubscribeSerializer, UnsubscribeSerializer
+from quickstart.utils.logger import log_error
 from quickstart.utils.response_handler import ResponseHandler
 
 
@@ -16,18 +17,21 @@ class SubscribeView(APIView):
         try:
             to_be_subscribed = User.objects.get(username=pk)
         except User.DoesNotExist:
+            log_error(request, 'No blogs written by specific author', 200)
             return ResponseHandler.error(
                 message="No Blogs written by this Author",
                 code=1
             )
 
         if to_be_subscribed.profile.role.lower() != 'writer':
+            log_error(request, 'Can only subscribe to writer', 200)
             return ResponseHandler.error(
                 message="You can only subscribe to a writer",
                 code=1
             )
 
         if current_user.username == pk:
+            log_error(request, 'Cannot subscribe to yourself', 200)
             return ResponseHandler.error(
                 message="You cannot Subscribe Yourself",
                 code=1
@@ -40,6 +44,7 @@ class SubscribeView(APIView):
         ).first()
 
         if existing_active_subscriber:
+            log_error(request, 'Already subscribed', 200)
             return ResponseHandler.error(
                 message=f'You are already subscribed to {to_be_subscribed.username}',
                 code=1
@@ -60,6 +65,7 @@ class SubscribeView(APIView):
         )
 
     def http_method_not_allowed(self, request, *args, **kwargs):
+        log_error(request, 'Methods other than POST being used', 200)
         return ResponseHandler.error(
             message='Only POST method is allowed for subscription.',
             code=-1
@@ -75,6 +81,7 @@ class UnsubscribeView(APIView):
         try:
             to_be_unsubscribed = User.objects.get(username=pk)
         except User.DoesNotExist:
+            log_error(request, 'No blogs written by specific author', 200)
             return ResponseHandler.error(
                 message="No Blogs written by this Author",
                 code=1
@@ -87,6 +94,7 @@ class UnsubscribeView(APIView):
         ).first()
 
         if not active_subscription:
+            log_error(request, 'First subscribe', 200)
             return ResponseHandler.error(
                 message=f'You are not subscribed to {to_be_unsubscribed.username}. First Subscribe',
                 code=1
@@ -112,6 +120,7 @@ class UnsubscribeView(APIView):
         )
 
     def http_method_not_allowed(self, request, *args, **kwargs):
+        log_error(request, 'Methods other than POST being used', 200)
         return ResponseHandler.error(
             message='Only POST method is allowed for Unsubscription.',
             code=-1

@@ -2,19 +2,20 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from quickstart.models.blog_models import BlogModel, BlogPostCommentModel, ReplyCommentModel
 from quickstart.models.reaction_models import BlogReactionModel, CommentReactionModel, ReplyReactionModel
+from quickstart.utils.logger import log_error
 from quickstart.utils.response_handler import ResponseHandler
 from quickstart.utils.reaction_handler import handle_reaction_logic, extract_action_from_path
 
 
 class BlogReaction(APIView):
     permission_classes = [IsAuthenticated]
-
     def post(self, request, pk):
         current_user = request.user
 
         try:
             blog = BlogModel.objects.get(pk=pk)
         except BlogModel.DoesNotExist:
+            log_error(request, 'Blog not found', 200)
             return ResponseHandler.error(
                 message='Blog not found',
                 code=1
@@ -32,8 +33,9 @@ class BlogReaction(APIView):
         )
 
     def http_method_not_allowed(self, request, *args, **kwargs):
+        log_error(request, 'Other methods being used, other than POST', 200)
         return ResponseHandler.error(
-            message='Only POST is allowed on register',
+            message='Only POST is allowed on reaction',
             code=-1
         )
 
@@ -47,6 +49,7 @@ class CommentBlogPostReaction(APIView):
         try:
             comment = BlogPostCommentModel.objects.get(pk=pk)
         except BlogPostCommentModel.DoesNotExist:
+            log_error(request, 'Comment not found for reaction', 200)
             return ResponseHandler.error(
                 message='Comment not found',
                 code=1
@@ -64,6 +67,7 @@ class CommentBlogPostReaction(APIView):
         )
 
     def http_method_not_allowed(self, request, *args, **kwargs):
+        log_error(request, 'Other methods being used, other than POST', 200)
         return ResponseHandler.error(
             message='Only POST is allowed for reacting to comments.',
             code=-1
@@ -79,6 +83,7 @@ class ReplyReactionView(APIView):
         try:
             reply = ReplyCommentModel.objects.select_related('comment__blog', 'user').get(pk=pk)
         except ReplyCommentModel.DoesNotExist:
+            log_error(request, 'Reply not found for reaction', 200)
             return ResponseHandler.error(
                 message='Reply not found.',
                 code=1
@@ -97,6 +102,7 @@ class ReplyReactionView(APIView):
 
 
     def http_method_not_allowed(self, request, *args, **kwargs):
+        log_error(request, 'Other methods being used, other than POST', 200)
         return ResponseHandler.error(
             message='Only POST is allowed for reacting to comments.',
             code=-1

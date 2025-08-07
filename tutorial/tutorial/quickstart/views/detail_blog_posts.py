@@ -5,6 +5,7 @@ from quickstart.models.blog_models import BlogModel, BlogPostCommentModel,ReplyC
 from quickstart.models.reaction_models import ReplyReactionModel, CommentReactionModel
 from quickstart.models.subscription_models import SubscribeTable
 from quickstart.serializers.blog_post_serializer import BlogPostSerializer, CommentSerializer, ReplySerializer
+from quickstart.utils.logger import log_error
 from quickstart.utils.response_handler import ResponseHandler
 
 class DetailBlogPost(APIView):
@@ -24,6 +25,7 @@ class DetailBlogPost(APIView):
             try:
                 specific_blog = BlogModel.objects.select_related('user').get(pk=pk)
             except BlogModel.DoesNotExist:
+                log_error(request, f'No blog exist with id {pk}', 200)
                 return ResponseHandler.error(
                     message='Blog not found',
                     code=-1,
@@ -43,6 +45,7 @@ class DetailBlogPost(APIView):
             )
 
         else:
+            log_error(request, 'Other roles trying to fetch blogs', 200)
             return ResponseHandler.error(
                 code = -1,
                 message='No other Roles Allowed',
@@ -120,6 +123,7 @@ class DetailBlogPost(APIView):
             try:
                 specific_blog = BlogModel.objects.select_related('user').get(pk=pk, user=current_user)
             except BlogModel.DoesNotExist:
+                log_error(request, 'Specific Blog not found', 200)
                 return ResponseHandler.error(message='Blog not found', code=-1)
 
 
@@ -135,6 +139,7 @@ class DetailBlogPost(APIView):
                     data=response_data
                 )
             else:
+                log_error(request, 'validation failed', 200)
                 return ResponseHandler.error(
                     message='Validation failed',
                     code=1,
@@ -142,12 +147,14 @@ class DetailBlogPost(APIView):
                 )
 
         elif current_user.profile.role.lower() == 'viewer':
+            log_error(request, 'Viewer is trying to change blogs', 200)
             return ResponseHandler.error(
                 code = -1,
                 message='You are Viewer you are not allowed to change this blog',
                 errors="NONE"
             )
         else:
+            log_error(request, 'No other roles allowed', 200)
             return ResponseHandler.error(
                 code = -1,
                 message='No Other Roles Allowed',
@@ -160,6 +167,7 @@ class DetailBlogPost(APIView):
             try:
                 specific_blog = BlogModel.objects.select_related('user').get(pk=pk, user=current_user)
             except BlogModel.DoesNotExist:
+                log_error(request, 'Specific Blog not found', 200)
                 return ResponseHandler.error(message='Blog not found', code=-1)
 
             serializer = BlogPostSerializer(specific_blog, data=request.data, partial=True)
@@ -174,6 +182,7 @@ class DetailBlogPost(APIView):
                     data=response_data
                 )
             else:
+                log_error(request, 'validation failed', 200)
                 return ResponseHandler.error(
                     message='Validation failed',
                     code=1,
@@ -181,12 +190,14 @@ class DetailBlogPost(APIView):
                 )
 
         elif current_user.profile.role.lower() == 'viewer':
+            log_error(request, 'Viewer is trying to change blogs', 200)
             return ResponseHandler.error(
                 code = -1,
                 message='You are Viewer you are not allowed to Patch this blog',
                 errors="NONE"
             )
         else:
+            log_error(request, 'No other roles allowed', 200)
             return ResponseHandler.error(
                 code = -1,
                 message='No Other Roles Allowed',
@@ -200,6 +211,7 @@ class DetailBlogPost(APIView):
                 specific_blog = BlogModel.objects.get(pk=pk, user=current_user)
                 author_name = specific_blog.user.username
             except BlogModel.DoesNotExist:
+                log_error(request, 'Specific Blog not found', 200)
                 return ResponseHandler.error(message='Blog not found', code=-1)
 
             specific_blog.delete()
@@ -213,12 +225,14 @@ class DetailBlogPost(APIView):
             )
 
         elif current_user.profile.role.lower() == 'viewer':
+            log_error(request, 'Viewer is trying to delete blog', 200)
             return ResponseHandler.error(
                 code=-1,
                 message='You are Viewer you are not allowed to change Delete blog',
                 errors="NONE"
             )
         else:
+            log_error(request, 'No other roles allowed', 200)
             return ResponseHandler.error(
                 code = -1,
                 message='No Other Roles Allowed',

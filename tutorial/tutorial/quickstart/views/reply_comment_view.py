@@ -3,6 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from quickstart.models.blog_models import BlogModel, BlogPostCommentModel, ReplyCommentModel
 from quickstart.serializers.blog_post_serializer import ReplySerializer
+from quickstart.utils.logger import log_error
 from quickstart.utils.response_handler import ResponseHandler
 
 class ReplyCommentBlogPost(APIView):
@@ -22,6 +23,7 @@ class ReplyCommentBlogPost(APIView):
         comment_id = data.get('comment')
         reply_text = data.get('reply')
         if not comment_id or not reply_text:
+            log_error(request, 'Both or one field is missing', 200)
             return ResponseHandler.error(
                 message='Both comment and reply fields are required.',
                 code=1
@@ -30,6 +32,7 @@ class ReplyCommentBlogPost(APIView):
         try:
             comment = BlogPostCommentModel.objects.select_related('blog', 'user').get(pk=comment_id)
         except BlogPostCommentModel.DoesNotExist:
+            log_error(request, 'No comment exist', 200)
             return ResponseHandler.error(
                 message='Comment does not exist.',
                 code=1
@@ -62,6 +65,7 @@ class ReplyCommentBlogPost(APIView):
                 )
 
     def http_method_not_allowed(self, request, *args, **kwargs):
+        log_error(request, 'Methods other than POST being used', 200)
         return ResponseHandler.error(
             message='Only POST is allowed for replying',
             code=-1
