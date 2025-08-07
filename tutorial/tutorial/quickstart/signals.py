@@ -181,4 +181,4 @@ def blog_delete_handler(sender, instance, **kwargs):
         related_logs = activity_map.activity_logs.exclude(id=activity.id)
         related_logs.update(status=2)
     except BlogActivityMap.DoesNotExist:
-        pass  # IIF NOTHING FOUND
+        pass  # IF NOTHING FOUND
