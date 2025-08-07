@@ -21,7 +21,7 @@ class CommentBlogPost(APIView):
         blog_id = data.get('blog')
         comment_text = data.get('comment')
         if not blog_id or not comment_text:
-            log_error(request, 'Fields are empty', 200)
+            log_error(request, 'Fields are empty for blog and comments', 200)
             return ResponseHandler.error(
                 message='Both blog and comment fields are required.',
                 code=1

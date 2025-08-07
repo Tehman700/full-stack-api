@@ -123,7 +123,7 @@ class DetailBlogPost(APIView):
             try:
                 specific_blog = BlogModel.objects.select_related('user').get(pk=pk, user=current_user)
             except BlogModel.DoesNotExist:
-                log_error(request, 'Specific Blog not found', 200)
+                log_error(request, f'Specific Blog not found for id {pk}', 200)
                 return ResponseHandler.error(message='Blog not found', code=-1)
 
 
@@ -167,7 +167,7 @@ class DetailBlogPost(APIView):
             try:
                 specific_blog = BlogModel.objects.select_related('user').get(pk=pk, user=current_user)
             except BlogModel.DoesNotExist:
-                log_error(request, 'Specific Blog not found', 200)
+                log_error(request, f'Specific Blog not found with id {pk}', 200)
                 return ResponseHandler.error(message='Blog not found', code=-1)
 
             serializer = BlogPostSerializer(specific_blog, data=request.data, partial=True)
@@ -211,7 +211,7 @@ class DetailBlogPost(APIView):
                 specific_blog = BlogModel.objects.get(pk=pk, user=current_user)
                 author_name = specific_blog.user.username
             except BlogModel.DoesNotExist:
-                log_error(request, 'Specific Blog not found', 200)
+                log_error(request, f'Specific Blog not found with id {pk}', 200)
                 return ResponseHandler.error(message='Blog not found', code=-1)
 
             specific_blog.delete()

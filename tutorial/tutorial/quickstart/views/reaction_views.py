@@ -11,11 +11,10 @@ class BlogReaction(APIView):
     permission_classes = [IsAuthenticated]
     def post(self, request, pk):
         current_user = request.user
-
         try:
             blog = BlogModel.objects.get(pk=pk)
         except BlogModel.DoesNotExist:
-            log_error(request, 'Blog not found', 200)
+            log_error(request, f'Blog not found with id {pk}', 200)
             return ResponseHandler.error(
                 message='Blog not found',
                 code=1
@@ -45,11 +44,10 @@ class CommentBlogPostReaction(APIView):
 
     def post(self, request, pk):
         current_user = request.user
-
         try:
             comment = BlogPostCommentModel.objects.get(pk=pk)
         except BlogPostCommentModel.DoesNotExist:
-            log_error(request, 'Comment not found for reaction', 200)
+            log_error(request, f'Comment not found for reaction for id {pk}', 200)
             return ResponseHandler.error(
                 message='Comment not found',
                 code=1
@@ -83,7 +81,7 @@ class ReplyReactionView(APIView):
         try:
             reply = ReplyCommentModel.objects.select_related('comment__blog', 'user').get(pk=pk)
         except ReplyCommentModel.DoesNotExist:
-            log_error(request, 'Reply not found for reaction', 200)
+            log_error(request, f'Reply not found for reaction for id {pk}', 200)
             return ResponseHandler.error(
                 message='Reply not found.',
                 code=1

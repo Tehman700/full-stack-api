@@ -17,7 +17,7 @@ class SubscribeView(APIView):
         try:
             to_be_subscribed = User.objects.get(username=pk)
         except User.DoesNotExist:
-            log_error(request, 'No blogs written by specific author', 200)
+            log_error(request, f'No blogs written by specific author {pk}', 200)
             return ResponseHandler.error(
                 message="No Blogs written by this Author",
                 code=1
@@ -81,7 +81,7 @@ class UnsubscribeView(APIView):
         try:
             to_be_unsubscribed = User.objects.get(username=pk)
         except User.DoesNotExist:
-            log_error(request, 'No blogs written by specific author', 200)
+            log_error(request, f'No blogs written by specific author {pk}', 200)
             return ResponseHandler.error(
                 message="No Blogs written by this Author",
                 code=1

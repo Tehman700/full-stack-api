@@ -40,7 +40,7 @@ class LoginViewSet(viewsets.ViewSet):
                 try:
                     user_profile = User_Data.objects.get(user=user)
                 except User_Data.DoesNotExist:
-                    log_error(request, 'User profile does not exist', 200)
+                    log_error(request, f'User profile does not exist for {user}', 200)
                     return ResponseHandler.rest_error(
                         message="User profile not found",
                         errors="User profile does not exist"
@@ -69,7 +69,7 @@ class LoginViewSet(viewsets.ViewSet):
                     }
                 }, message="Login successful")
 
-            log_error(request, "Login Failed", 200)
+            log_error(request, "Login Failed for user", 200)
             return ResponseHandler.rest_error(
                 message="Login failed",
                 errors=serializer.errors
@@ -111,6 +111,7 @@ class RegisterAPIView(APIView):
             last_name = data['last_name']
 
             if User.objects.filter(username=username).exists():
+                log_error(request,f"User {username} already exists", 200)
                 return ResponseHandler.error("Username already exists")
 
             user = User.objects.create_user(

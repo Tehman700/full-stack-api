@@ -32,7 +32,7 @@ class ReplyCommentBlogPost(APIView):
         try:
             comment = BlogPostCommentModel.objects.select_related('blog', 'user').get(pk=comment_id)
         except BlogPostCommentModel.DoesNotExist:
-            log_error(request, 'No comment exist', 200)
+            log_error(request, f'No comment exist with this {comment_id}', 200)
             return ResponseHandler.error(
                 message='Comment does not exist.',
                 code=1
