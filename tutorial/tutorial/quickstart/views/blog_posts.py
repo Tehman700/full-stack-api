@@ -11,6 +11,7 @@ from quickstart.tasks.email_tasks import send_blog_notification_email
 class BlogPostAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
+
     def post(self, request):
         current_user = request.user
 
