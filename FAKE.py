@@ -263,8 +263,6 @@
         #         blog_data['author_id'] = current_user.id
         #
         #         blog_data['comments'] = self.get_comments_with_replies(blog, current_user)
-        #
-        #
         #         data_with_authors.append(blog_data)
         #
         #     return ResponseHandler.success(
