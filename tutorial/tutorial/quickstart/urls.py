@@ -15,7 +15,6 @@ urlpatterns = [
     path('blog/<int:pk>/', DetailBlogPost.as_view(), name='detailblogpost'),
     path('blog/like/<int:pk>/', BlogReaction.as_view(), name='likeblog'),
     path('blog/dislike/<int:pk>/', BlogReaction.as_view(), name='dislikeblog'),
-
     path('comment/', CommentBlogPost.as_view(), name='commentblogpost'),
 
     path('comment/like/<int:pk>/', CommentBlogPostReaction.as_view(), name='likecomment'),
