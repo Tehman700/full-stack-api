@@ -13,7 +13,6 @@ urlpatterns = [
     path('login/', LoginViewSet.as_view({'post': 'create'}), name='login'),
     path('blog/', BlogPostAPIView.as_view(), name='blogpost'),
     path('blog/<int:pk>/', DetailBlogPost.as_view(), name='detailblogpost'),
-
     path('blog/like/<int:pk>/', BlogReaction.as_view(), name='likeblog'),
     path('blog/dislike/<int:pk>/', BlogReaction.as_view(), name='dislikeblog'),
 
