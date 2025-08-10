@@ -1,0 +1,49 @@
+/* Animated background styles */
+.login-page-bg {
+background-image: url('img.png'); /* Replace with the actual path to your image /
+background-size: cover; / Adjust as needed: contain, auto, or specific dimensions /
+background-position: center; / Adjust as needed: top, bottom, left, right, or percentages /
+background-repeat: no-repeat; / Prevent the image from repeating /
+opacity: 0.7; / Adjust the transparency (0.0 - fully transparent, 1.0 - fully opaque) */
+}
+
+@keyframes gradient-animation {
+0% {
+background-position: 0% 50%;
+}
+50% {
+background-position: 100% 50%;
+}
+100% {
+background-position: 0% 50%;
+}
+}
+
+@keyframes gradient-animation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Card and form animations */
+.login-card {
+  opacity: 0;
+  animation: fadeInFromTop 1s ease-in-out forwards;
+}
+
+@keyframes fadeInFromTop {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

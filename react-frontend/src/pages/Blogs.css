@@ -1,0 +1,29 @@
+/* Custom CSS for a clean, modern blog layout */
+
+/* Blog card animations */
+.blog-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.blog-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+}
+
+/* Custom button styles for reactions */
+.btn-reaction {
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.btn-reaction:hover {
+  transform: scale(1.05);
+}
+
+.btn-reaction:active {
+  transform: scale(0.95);
+}
+
+/* Comment section styling */
+.comments-container {
+  border-top: 1px solid #dee2e6;
+}
