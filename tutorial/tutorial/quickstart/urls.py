@@ -25,7 +25,6 @@ urlpatterns = [
     path('reply/', ReplyCommentBlogPost.as_view(), name = 'replycomment'),
     path('reply/dislike/<int:pk>/', ReplyReactionView.as_view(), name='dislikereply'),
     path('reply/like/<int:pk>/', ReplyReactionView.as_view(), name='likereply'),
-
     path('subscribe/<str:pk>/', SubscribeView.as_view(), name='subscribe'),
     path('unsubscribe/<str:pk>/', UnsubscribeView.as_view(), name='unsubscribe'),
 ]
