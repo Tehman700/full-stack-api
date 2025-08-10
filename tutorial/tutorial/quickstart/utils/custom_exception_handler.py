@@ -15,7 +15,6 @@ def custom_exception_handler(exc, context):
             code=-1,
             errors=str(exc)
         )
-
     if isinstance(exc, PermissionDenied):
         log_error(request, "Dont have permission to perform action", 200)
         return ResponseHandler.error(
