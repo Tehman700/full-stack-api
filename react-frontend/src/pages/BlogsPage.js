@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import "./Blogs.css"; // Import the custom CSS file
+import "./Blogs.css";
 
 export default function BlogsPage() {
   const [blogs, setBlogs] = useState([]);
