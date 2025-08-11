@@ -38,10 +38,10 @@ const fetchUserProfile = async () => {
         }
     } catch (error) {
         console.error("Error fetching user profile:", error);
-        // If the API call fails (e.g., a viewer gets a 403 Forbidden), set role to 'viewer'
         setUserRole('viewer');
     }
 };
+
 
   const fetchBlogs = async () => {
     try {
