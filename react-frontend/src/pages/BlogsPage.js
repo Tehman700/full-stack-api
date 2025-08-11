@@ -42,7 +42,6 @@ const fetchUserProfile = async () => {
         setUserRole('viewer');
     }
 };
-
   const fetchBlogs = async () => {
     try {
       const token = localStorage.getItem("token");
