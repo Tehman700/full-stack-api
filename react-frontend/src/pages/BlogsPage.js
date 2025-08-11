@@ -29,7 +29,6 @@ const fetchUserProfile = async () => {
                 Authorization: `Bearer ${token}`,
             },
         });
-
         // The API returns a 'user' object for a writer
         if (response.data.user && response.data.user.role === 'writer') {
             setUserRole('writer');
