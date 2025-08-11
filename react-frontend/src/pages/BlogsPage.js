@@ -20,6 +20,7 @@ export default function BlogsPage() {
     fetchBlogs();
   }, []);
 
+
 const fetchUserProfile = async () => {
     try {
         const token = localStorage.getItem("token");
