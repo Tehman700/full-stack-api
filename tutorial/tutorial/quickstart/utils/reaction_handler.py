@@ -51,7 +51,7 @@ def update_reaction_counts(target_object, reaction_model, reaction_field_name):
     """
     Update the like/dislike counts on the target object based on actual reactions
     """
-    # Count actual reactions
+    # Count actual reactions of users
     reaction_filter = {reaction_field_name: target_object}
 
     reaction_counts = reaction_model.objects.filter(**reaction_filter).aggregate(
@@ -67,4 +67,4 @@ def update_reaction_counts(target_object, reaction_model, reaction_field_name):
 
 def extract_action_from_path(request_path):
     parts = request_path.strip('/').split('/')
-    return parts[2]  # index 2 corresponds to 'like' or 'dislike'
+    return parts[2]
