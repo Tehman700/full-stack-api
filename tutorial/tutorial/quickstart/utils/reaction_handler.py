@@ -37,7 +37,6 @@ def handle_reaction_logic(current_user, target_object, action, reaction_model, r
             message = f"Your reaction has been changed to {action} for this {object_name}."
     else:
         message = f"You have {action}d this {object_name}."
-
     # Update the target object's like/dislike counts
     update_reaction_counts(target_object, reaction_model, reaction_field_name)
 
