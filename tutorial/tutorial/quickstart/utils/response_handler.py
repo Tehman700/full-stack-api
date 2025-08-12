@@ -18,7 +18,6 @@ class ResponseHandler:
             "message": message,
             "data": errors
         }, status=status_code)
-
     @staticmethod
     def rest_success(data=None, message="Success", code=0, status_code=200):
         return Response({
