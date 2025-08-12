@@ -23,7 +23,6 @@ def handle_reaction_logic(current_user, target_object, action, reaction_model, r
         **reaction_filter,
         defaults={'reaction': action}
     )
-
     if not created:
         if reaction.reaction == action:
             # User is removing their reaction
