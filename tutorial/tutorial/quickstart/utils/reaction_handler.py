@@ -65,7 +65,6 @@ def update_reaction_counts(target_object, reaction_model, reaction_field_name):
     target_object.save(update_fields=['likes', 'dislikes'])
 
 
-
 def extract_action_from_path(request_path):
     parts = request_path.strip('/').split('/')
     return parts[2]  # index 2 corresponds to 'like' or 'dislike'
