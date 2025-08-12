@@ -1,6 +1,5 @@
 from rest_framework.response import Response
 from django.http import JsonResponse
-
 class ResponseHandler:
     @staticmethod
     def success(data=None, message="Success", code=0, status_code=200):
