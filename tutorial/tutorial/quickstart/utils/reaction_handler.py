@@ -5,7 +5,6 @@ Below is my Custom Logic for the Likes, Dislikes,of every blog, comment or reply
 This handles all the logic very efficiently and A simple correct POST request handles it very easily
 
                 /api/blog_or_comment_or_reply/like_or_dislike/id_of_specific
-
 """
 def handle_reaction_logic(current_user, target_object, action, reaction_model, reaction_field_name, object_name):
     # Check if user is trying to dislike their own content
