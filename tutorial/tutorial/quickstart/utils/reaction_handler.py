@@ -7,7 +7,6 @@ This handles all the logic very efficiently and A simple correct POST request ha
                 /api/blog_or_comment_or_reply/like_or_dislike/id_of_specific
 
 """
-
 def handle_reaction_logic(current_user, target_object, action, reaction_model, reaction_field_name, object_name):
     # Check if user is trying to dislike their own content
     if action == 'dislike' and target_object.user == current_user:
