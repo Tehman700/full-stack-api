@@ -45,7 +45,6 @@ def handle_reaction_logic(current_user, target_object, action, reaction_model, r
         code=0
     )
 
-
 def update_reaction_counts(target_object, reaction_model, reaction_field_name):
     """
     Update the like/dislike counts on the target object based on actual reactions
