@@ -60,7 +60,6 @@ def send_blog_notification_email(self, current_user_username, blog_title, subscr
                 "failed": failed_emails,
             }
         }
-
         logger.info(f"Email task completed: {result}")
         return result
 
