@@ -34,6 +34,7 @@ def send_blog_notification_email(self, current_user_username, blog_title, subscr
             f"Happy reading!\n"
             f"— Tehman Hassan, CEO Blog API"
         )
+
         successful_emails = []
         failed_emails = []
         for email in valid_emails:
