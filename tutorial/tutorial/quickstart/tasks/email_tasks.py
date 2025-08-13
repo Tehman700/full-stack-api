@@ -35,7 +35,6 @@ def send_blog_notification_email(self, current_user_username, blog_title, subscr
         )
         successful_emails = []
         failed_emails = []
-
         for email in valid_emails:
             try:
                 send_mail(
