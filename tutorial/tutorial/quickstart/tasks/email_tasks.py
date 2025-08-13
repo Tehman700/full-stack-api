@@ -22,6 +22,7 @@ def send_blog_notification_email(self, current_user_username, blog_title, subscr
 
         logger.info(f"Sending blog notification to {len(valid_emails)} subscribers")
 
+
         subject = f"New Blog Post by {current_user_username}"
         body = (
             f"Hello Subscriber,\n\n"
