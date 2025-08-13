@@ -50,7 +50,6 @@ def send_blog_notification_email(self, current_user_username, blog_title, subscr
             except Exception as email_error:
                 logger.error(f"Failed to send email to {email}: {str(email_error)}")
                 failed_emails.append({"email": email, "error": str(email_error)})
-
         result = {
             "status": "completed",
             "successful_emails": len(successful_emails),
