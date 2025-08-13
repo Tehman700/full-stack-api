@@ -63,6 +63,7 @@ def send_blog_notification_email(self, current_user_username, blog_title, subscr
 
         logger.info(f"Email task completed: {result}")
         return result
+
     except Exception as exc:
         logger.error(f"Email task failed: {str(exc)}")
         try:
